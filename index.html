@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Opexis Digital – NFC AI Landing</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<style>
+:root{
+  --blue:#004aad;
+  --line:rgba(148,163,184,.25);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+  min-height:100vh;
+  background:url("13.png") center/cover no-repeat fixed;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:rgba(2,6,23,.7);
+}
+
+.phone{
+  width:100%;
+  max-width:460px;
+  height:100vh;
+  background:rgba(2,8,23,.75);
+  backdrop-filter:blur(10px);
+  padding:16px;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  position:relative;
+  z-index:1;
+}
+
+header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.logo{
+  width:42px;height:42px;border-radius:50%;
+  background:var(--blue);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;
+}
+header div span:first-child{
+  font-size:14px;font-weight:700;letter-spacing:.08em;
+}
+header div span:last-child{
+  font-size:11px;color:#c2d4ff;
+}
+
+/* CONTATTO */
+.card{
+  background:rgba(2,6,23,.6);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:12px;
+}
+.card h2{
+  font-size:14px;margin-bottom:6px;
+}
+.card .meta{
+  font-size:12px;margin-bottom:10px;
+  line-height:1.5;
+}
+.card a{color:#d1e3ff;text-decoration:none}
+
+/* FOTO PROFILO (a destra nei contatti, senza cambiare layout) */
+.profile-photo{
+  float:right;
+  width:78px;
+  height:78px;
+  border-radius:50%;
+  object-fit:cover;
+  margin:0 0 8px 10px;
+  border:2px solid rgba(255,255,255,.6);
+}
+
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 14px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:rgba(2,6,23,.6);
+  color:#fff;
+  font-size:12px;
+  text-decoration:none;
+  cursor:pointer;
+}
+.dot{
+  width:9px;height:9px;border-radius:50%;
+  background:#fff;
+}
+
+/* HERO */
+.hero{text-align:center;}
+.hero h1{font-size:24px;margin:6px 0;}
+.hero h1 span{color:var(--blue)}
+.hero p{font-size:13px;color:#d1e3ff;}
+
+/* VIDEO */
+.video-box{
+  background:#000;
+  border-radius:16px;
+  overflow:hidden;
+  margin:8px 0;
+}
+video{width:100%;display:block;}
+.video-controls{display:flex;}
+.video-controls button{
+  flex:1;
+  padding:10px;
+  border:none;
+  background:#111;
+  color:#fff;
+  font-size:12px;
+  cursor:pointer;
+}
+
+/* CTA AI */
+.cta a{
+  display:block;
+  width:100%;
+  padding:14px;
+  text-align:center;
+  border-radius:999px;
+  background:linear-gradient(135deg,var(--blue),#001a4f);
+  color:#fff;
+  font-weight:700;
+  text-decoration:none;
+}
+
+/* SOCIAL */
+.socials{
+  display:flex;
+  gap:8px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+footer{
+  margin-top:auto;
+  text-align:center;
+  font-size:10px;
+  color:#94a3b8;
+}
+
+/* ===== GALLERIA (LIGHTBOX) ===== */
+.gallery-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.75);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  padding:14px;
+}
+.gallery-modal.is-open{display:flex;}
+.gallery-box{
+  width:min(520px, 96vw);
+  background:rgba(2,8,23,.92);
+  border:1px solid rgba(148,163,184,.22);
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 20px 50px rgba(0,0,0,.6);
+}
+.gallery-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 12px;
+  border-bottom:1px solid rgba(148,163,184,.18);
+}
+.gallery-title{
+  font-size:12px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:#c2d4ff;
+  font-weight:700;
+}
+.gallery-close{
+  border:1px solid rgba(148,163,184,.25);
+  background:rgba(2,6,23,.45);
+  color:#fff;
+  border-radius:999px;
+  padding:7px 10px;
+  font-size:12px;
+  cursor:pointer;
+}
+.gallery-stage{
+  position:relative;
+  background:#000;
+}
+.gallery-stage img{
+  width:100%;
+  height:auto;
+  display:block;
+  max-height:62vh;
+  object-fit:contain;
+}
+.gallery-nav{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  padding:10px 12px;
+  border-top:1px solid rgba(148,163,184,.18);
+}
+.gallery-nav button{
+  flex:1;
+  border:1px solid rgba(148,163,184,.25);
+  background:rgba(2,6,23,.55);
+  color:#fff;
+  border-radius:999px;
+  padding:10px 12px;
+  font-size:12px;
+  cursor:pointer;
+}
+.gallery-dots{
+  display:flex;
+  gap:6px;
+  justify-content:center;
+  padding:0 0 12px;
+}
+.gallery-dots span{
+  width:7px;height:7px;border-radius:50%;
+  background:rgba(226,232,240,.35);
+}
+.gallery-dots span.active{
+  background:rgba(226,232,240,.95);
+}
+</style>
+</head>
+
+<body>
+<div class="phone">
+
+<header>
+  <div class="logo">O</div>
+  <div>
+    <span>Opexis Digital</span><br>
+    <span>Opportunity Nexus</span>
+  </div>
+</header>
+
+<!-- CONTATTO -->
+<section class="card">
+  <h2>Luca Lenci</h2>
+
+  <!-- FOTO PROFILO A DESTRA -->
+  <img src="13.png" alt="Luca Lenci" class="profile-photo">
+
+  <div class="meta">
+    <strong>Dati aziendali</strong><br>
+    Ragione sociale: Lenci Luca<br>
+    Partita IVA / Codice Fiscale: 17253541001 – CF LNCLCU71P05H501I<br>
+    Indirizzo sede fisica: Via Enrico Toti 21<br><br>
+
+    <strong>Contatti</strong><br>
+    Email: <a href="mailto:lucalenci1971@gmail.com">lucalenci1971@gmail.com</a><br>
+    Telefono: <a href="tel:+393457036539">3457036539</a><br><br>
+
+    <strong>Indirizzo</strong><br>
+    Via Lemonia 205, 00174 Roma (ROMA), Italia<br>
+    <small>DATI INVIATI A MIRCO</small>
+  </div>
+
+  <div class="actions">
+    <a class="btn" href="tel:+393457036539"><span class="dot"></span>Chiama</a>
+    <a class="btn" href="mailto:lucalenci1971@gmail.com"><span class="dot"></span>Email</a>
+
+    <!-- ✅ PULSANTE GALLERIA -->
+    <button class="btn" type="button" onclick="openGallery()">
+      <span class="dot"></span>Galleria
+    </button>
+
+    <button class="btn" onclick="saveContact()">
+      <span class="dot"></span>Salva in rubrica
+    </button>
+  </div>
+</section>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>Il marketing <span>con AI</span></h1>
+
+  <div class="video-box">
+    <video id="introVideo" autoplay playsinline muted>
+      <source src="video_intro.mp4" type="video/mp4">
+    </video>
+
+    <div class="video-controls">
+      <button onclick="enableAudio()">🔊 Attiva audio</button>
+      <button onclick="stopVideo()">⏹ Stop</button>
+    </div>
+  </div>
+
+  <p>Scopri Twynet: social professionale, AI, formazione e opportunità di business.</p>
+</section>
+
+<!-- CTA AI -->
+<section class="cta">
+  <a href="ai.html">💬 Parla con l’AI</a>
+</section>
+
+<!-- SOCIAL OPEXIS -->
+<section class="socials">
+  <a class="btn" href="https://www.instagram.com/opexis.digital/" target="_blank" rel="noopener"><span class="dot"></span>Opexis IG</a>
+  <a class="btn" href="https://www.facebook.com/profile.php?id=61580851595121" target="_blank" rel="noopener"><span class="dot"></span>Opexis FB</a>
+  <a class="btn" href="https://www.linkedin.com/company/opexis/" target="_blank" rel="noopener"><span class="dot"></span>LinkedIn</a>
+</section>
+
+<footer>
+© <span id="year"></span> Opexis Digital
+</footer>
+
+</div>
+
+<!-- ===== MODAL GALLERIA ===== -->
+<div id="galleryModal" class="gallery-modal" aria-hidden="true">
+  <div class="gallery-box" role="dialog" aria-modal="true" aria-label="Galleria Foto">
+    <div class="gallery-top">
+      <div class="gallery-title">Galleria</div>
+      <button class="gallery-close" type="button" onclick="closeGallery()">✕ Chiudi</button>
+    </div>
+
+    <div class="gallery-stage">
+      <img id="galleryImg" src="" alt="Foto galleria">
+    </div>
+
+    <div class="gallery-nav">
+      <button type="button" onclick="prevPhoto()">← Precedente</button>
+      <button type="button" onclick="nextPhoto()">Successiva →</button>
+    </div>
+
+    <div class="gallery-dots" id="galleryDots" aria-hidden="true"></div>
+  </div>
+</div>
+
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
+
+const video = document.getElementById("introVideo");
+
+function enableAudio(){
+  video.muted = false;
+  video.volume = 1;
+  video.play();
+}
+
+function stopVideo(){
+  video.pause();
+  video.currentTime = 0;
+}
+
+/* vCard */
+function saveContact(){
+  const vcf=`BEGIN:VCARD
+VERSION:3.0
+FN:Luca Lenci
+N:Lenci;Luca;;;
+ORG:Lenci Luca
+TEL;TYPE=CELL:+393457036539
+EMAIL;TYPE=INTERNET:lucalenci1971@gmail.com
+ADR;TYPE=WORK:;;Via Lemonia 205;Roma;ROMA;00174;Italia
+NOTE:DATI INVIATI A MIRCO | P.IVA/CF: 17253541001 – CF LNCLCU71P05H501I | Sede fisica: Via Enrico Toti 21
+END:VCARD`;
+
+  const blob=new Blob([vcf],{type:"text/vcard"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download="luca-lenci.vcf";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+/* ===== GALLERIA =====
+   Ho inserito le foto allegate usando i NOMI FILE così come caricati.
+   Assicurati che questi file siano nella stessa cartella di index.html su GitHub/Vercel.
+*/
+const galleryPhotos = [
+  { src: "WhatsApp%20Image%202026-02-09%20at%2012.28.25.jpeg", alt: "Foto 1" },
+  { src: "WhatsApp%20Image%202026-02-09%20at%2012.28.25%20(1).jpeg", alt: "Foto 2" },
+  { src: "WhatsApp%20Image%202026-02-09%20at%2012.28.25%20(2).jpeg", alt: "Foto 3" },
+  { src: "WhatsApp%20Image%202026-02-09%20at%2012.28.25%20(3).jpeg", alt: "Foto 4" },
+  { src: "WhatsApp%20Image%202026-02-09%20at%2012.28.25%20(4).jpeg", alt: "Foto 5" }
+];
+
+let galleryIndex = 0;
+
+const galleryModal = document.getElementById("galleryModal");
+const galleryImg = document.getElementById("galleryImg");
+const galleryDots = document.getElementById("galleryDots");
+
+function renderDots(){
+  galleryDots.innerHTML = "";
+  galleryPhotos.forEach((_, i) => {
+    const d = document.createElement("span");
+    if(i === galleryIndex) d.classList.add("active");
+    galleryDots.appendChild(d);
+  });
+}
+
+function showPhoto(index){
+  galleryIndex = (index + galleryPhotos.length) % galleryPhotos.length;
+  const p = galleryPhotos[galleryIndex];
+  galleryImg.src = p.src;
+  galleryImg.alt = p.alt;
+  renderDots();
+}
+
+function openGallery(){
+  showPhoto(galleryIndex);
+  galleryModal.classList.add("is-open");
+  galleryModal.setAttribute("aria-hidden","false");
+}
+
+function closeGallery(){
+  galleryModal.classList.remove("is-open");
+  galleryModal.setAttribute("aria-hidden","true");
+}
+
+function nextPhoto(){ showPhoto(galleryIndex + 1); }
+function prevPhoto(){ showPhoto(galleryIndex - 1); }
+
+/* chiudi cliccando fuori */
+galleryModal.addEventListener("click", (e) => {
+  if(e.target === galleryModal) closeGallery();
+});
+
+/* ESC per chiudere */
+document.addEventListener("keydown", (e) => {
+  if(e.key === "Escape" && galleryModal.classList.contains("is-open")) closeGallery();
+});
+</script>
+
+</body>
+</html>
